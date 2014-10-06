@@ -8,11 +8,11 @@ class _auth {
 
     private static $errLog = array();
 
-    public static function isExists($username, $password) {
+    public static function isExists($username) {
         $db = new Database();
         $db->connect();
-        if (_auth::validString($username) && _auth::validString($password)) {
-            $result = $db->query("select * from auth_users where username='$username' and password='$password'");
+        if (_auth::validString($username)) {
+            $result = $db->query("select * from auth_users where username='$username'");
             if (mysql_num_rows($result) > 0) {
                 $db->close();
                 return true;
@@ -31,11 +31,11 @@ class _auth {
     public static function addUser($username, $password, $displayName) {
         $db = new Database();
         $db->connect();
-        if (_auth::validString($username) && _auth::validString($password)) {
+        if (_auth::validString($username) && _auth::validString($password) && !_auth::isExists($username)) {
             $db->query("insert into auth_users (username,password,display_name,status) "
                     . "values('$username','$password','$displayName','active');");
         } else {
-            _auth::pushError("Unsafe Character(s) in given Username/Password!", "_auth->addUser");
+            _auth::pushError("Unsafe Character(s) in given Username/Password Or User already Exists!", "_auth->addUser");
             $db->close();
             return false;
         }
