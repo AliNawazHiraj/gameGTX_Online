@@ -2,11 +2,9 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title></title>
+        <title>gameGTX Online - Portal</title>
     </head>
     <body>
-        <?php
-        // put your code here
-        ?>
+        
     </body>
 </html>
