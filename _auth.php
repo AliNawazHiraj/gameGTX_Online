@@ -34,6 +34,8 @@ class _auth {
         if (_auth::validString($username) && _auth::validString($password) && !_auth::isExists($username)) {
             $db->query("insert into auth_users (username,password,display_name,status) "
                     . "values('$username','$password','$displayName','active');");
+            $db->close();
+            return true;
         } else {
             _auth::pushError("Unsafe Character(s) in given Username/Password Or User already Exists!", "_auth->addUser");
             $db->close();
