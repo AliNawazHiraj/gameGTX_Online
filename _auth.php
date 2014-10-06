@@ -21,23 +21,46 @@ class _auth {
                 return false;
             }
         } else {
-            _auth::pushError("Unsafe Character(s) in given Username/Password!", "_auth->isExists");
+            _auth::pushError("Unsafe Character(s) in given Username!", "_auth->isExists");
+            $db->close();
+            return false;
+        }
+        $db->close();
+    }
+    
+    
+    public static function getUserID($username) {
+        $db = new Database();
+        $db->connect();
+        if (_auth::validString($username)) {
+            $result = $db->query("select id from auth_users where username='$username'");
+            if ($data = mysql_fetch_array($result)) {
+                $id = $data[0];
+                $db->close();
+                return $id;
+            } else {
+                $db->close();
+                return false;
+            }
+        } else {
+            _auth::pushError("Unsafe Character(s) in given Username!", "_auth->isExists");
             $db->close();
             return false;
         }
         $db->close();
     }
 
-    public static function addUser($username, $password, $displayName) {
+    public static function addUser($username, $displayName) {
         $db = new Database();
         $db->connect();
-        if (_auth::validString($username) && _auth::validString($password) && !_auth::isExists($username)) {
-            $db->query("insert into auth_users (username,password,display_name,status) "
-                    . "values('$username','$password','$displayName','active');");
+        if (_auth::validString($username) && !_auth::isExists($username)) {
+            $db->query("insert into auth_users (username,display_name,status) "
+                    . "values('$username','$displayName','active');");
+            $id = mysql_insert_id();
             $db->close();
-            return true;
+            return $id;
         } else {
-            _auth::pushError("Unsafe Character(s) in given Username/Password Or User already Exists!", "_auth->addUser");
+            _auth::pushError("Unsafe Character(s) in given Username Or User already Exists!", "_auth->addUser");
             $db->close();
             return false;
         }
@@ -45,7 +68,7 @@ class _auth {
     }
 
     public static function validString($string) {
-        if (ctype_alnum($testcase))
+        if (ctype_alnum($string))
             return true;
         return false;
     }
