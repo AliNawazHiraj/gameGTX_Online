@@ -50,8 +50,15 @@ class _player {
             $res1 = $db->query("select turn from player where room_id=" . $room_id);
             if ($data1 = mysql_fetch_array($res1)) {
                 // Second turn
-                $db->query("insert into player (user_id,room_id,turn,score,p2p_data) values "
+                if($data1[0]==1)
+                {
+                    $db->query("insert into player (user_id,room_id,turn,score,p2p_data) values "
                         . "($user_id,$room_id,0,0,'0-0,0-0,0-0,0-0,0-0,0-0,0-0,0-0,0-0+0');");
+                }else{
+                    //first turn
+                    $db->query("insert into player (user_id,room_id,turn,score,p2p_data) values "
+                        . "($user_id,$room_id,1,0,'0-0,0-0,0-0,0-0,0-0,0-0,0-0,0-0,0-0+0');");
+                }
             } else {
                 // First turn
                 $db->query("insert into player (user_id,room_id,turn,score,p2p_data) values "
@@ -200,7 +207,7 @@ if(isset($_POST['req']))
     if($req=="gamePlayers")
     {
         $room_id = $_POST['room_id'];
-        
+        $caption_done = 0;
         $db = new Database();
         $db->connect();
         $result = $db->query("select user_id,turn,score from player where room_id=".$room_id);
@@ -208,15 +215,17 @@ if(isset($_POST['req']))
             $res = $db->query("select display_name from auth_users where id=".$data[0]);
             $dat = mysql_fetch_array($res);
             
-            if(!getGameState($room_id))
+            if(!getGameState($room_id) && $caption_done==0)
             {
                 echo "<div style='text-align: center;vertical-align: center;width: 100%;height: 30px; border: none; background-color: orange;'>"
                 . "Waiting for players ..."
                         . "</div>";
-            }else{
+                $caption_done = 1;
+            }else if($caption_done==0){
                 echo "<div style='text-align: center;vertical-align: center;width: 100%;height: 30px; border: none; background-color: lightblue;'>"
                 . "Game Started"
                         . "</div>";
+                $caption_done = 1;
             }
             
             if($data[1]==1)

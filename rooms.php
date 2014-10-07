@@ -16,6 +16,8 @@ if(isset($_GET['game_id']))
     $game_title = "";
     $game_link = "";
     
+    $_SESSION['game_id'] = $game_id; 
+    
     $db = new Database();
     $db->connect();
     

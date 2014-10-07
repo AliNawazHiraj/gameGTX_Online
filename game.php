@@ -17,7 +17,7 @@ if(isset($_POST['req']))
         {
             echo "<div class='off_white' style='width: 200px; height: 300px;float: left;margin-left: 5px; margin-top: 5px;'>";
             echo "<div class='bg_blue' style='float: left;height: 30px;width: 100%;'><b style='color: white;margin-left: 5px;margin-top: 5px;'> ".$data['game_title']."</b></div>"; // game title
-            echo "<img style='float: left;' style='width:200px;height:200px;' src='".$data['game_link']."img/main.png'/>"; // main image            
+            echo "<img height='200' width='200' style='float: left;' style='width:200px;height:200px;' src='".$data['game_link']."img/main.png'/>"; // main image            
             echo "<input style='float: right;margin-right: 5px;margin-top: 10px;' onclick='goto_room($data[0])' type='button' value='Play Now'/>"; // Rooms Button            
             echo "<div style='float: left;margin-left: 5px;margin-top: 10px;'> ".$data['game_desc']." </div>"; // game title            
             echo "</div>";
