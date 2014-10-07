@@ -13,7 +13,7 @@ $(document).ready(function () {
     $("#screen").css("height", "600");
     $("#screen").css("border", "2px solid black");
     $("#win").hide();
-    
+
     //varables
     var block_width = (600 / 3) - 2;
     var block_height = (600 / 3) - 2;
@@ -90,6 +90,28 @@ function isWinner()
     return win;
 }
 
+
+function isDraw()
+{
+    var draw = true;
+    //draw state checks START
+    var temp_a1 = p2p_data.split("+");
+    var temp_a2 = temp_a1[0].split(",");
+
+    for (var i = 0; i < temp_a2.length; i++)
+    {
+        var temp_a3 = temp_a2[i].split("-");
+        if (temp_a3[0] === '0')
+        {
+            draw = false;
+        }
+    }
+
+    //draw state checks STOP
+    return draw;
+}
+
+
 function block_click(block_id, user_id, room_id)
 {
     $.post("_player.php", {'req': 'gameState', 'room_id': room_id},
@@ -118,9 +140,15 @@ function block_click(block_id, user_id, room_id)
                         }
 
                         // Winner Check
-                        if(isWinner())
+                        if (isWinner())
                         {
                             setDataWin(getUserName() + " has Won the Game!");
+                        }
+
+                        // Draw Check
+                        if (isDraw())
+                        {
+                            setDataWin("The Game has drawn!");
                         }
 
 
