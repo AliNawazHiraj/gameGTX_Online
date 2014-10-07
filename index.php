@@ -33,6 +33,7 @@ if(isset($_GET['username']))
     <head>
         <meta charset="UTF-8">
         <title>gameGTX Online - Portal</title>
+        <link href="run.css" rel="stylesheet"/>
         <script src="jquery.js" type="text/javascript"></script>
         <script>
         
@@ -44,20 +45,24 @@ if(isset($_GET['username']))
             });
         });
         
+        function goto_room(game_id)
+        {
+            window.location = "rooms.php?game_id=" + game_id;
+        }
+        
         </script>
     </head>
     <body>
-        <div style="width: 100%; background-color: greenyellow; height: 60px;">
+        <div class="bg_green" style="width: 100%; height: 60px;color: white;">
             <h3 style="float: left; margin-left: 10px; margin-top: 20px;">gameGTX Online</h3>
             <b style="float: right;margin-right: 10px; margin-top: 20px;"> Welcome, <?php echo $_SESSION['user_name']; ?></b>
-        </div>
-    <center>        
-        <b>Games List</b>
-        <p>Select Games from list below to play ...</p>
-        <table id="games">
+        </div>      
+        <div id="games" class='Lgreen' style="width: 100%;min-height: 400px;">
             
-        </table>
-    </center>
+        </div>
+        <div class="bg_green" style="width: 100%; height: 60px;color: white;">
+            <center><p style='margin-top: 20px;'>All Rights Reserved. Copyright (c) DemiXsoft 2015</p></center>
+        </div>
 </body>
 </html>
 

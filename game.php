@@ -15,10 +15,45 @@ if(isset($_POST['req']))
         $result = $db->query("select * from games");
         while($data=  mysql_fetch_array($result))
         {
-            echo "<tr><td><img style='width:200px;height:200px;' src='".$data['game_link']."img/main.png'/></td></tr>"; // main image
-            echo "<tr><td><b>Title. </b> ".$data['game_title']." </td>"; // game title
-            echo "<td><input type='button' value='Play Now'/></td></tr>"; // Rooms Button            
-            echo "<tr><td><b>Description. </b> ".$data['game_desc']." </td></tr>"; // game title            
+            echo "<div class='off_white' style='width: 200px; height: 300px;float: left;margin-left: 5px; margin-top: 5px;'>";
+            echo "<div class='bg_blue' style='float: left;height: 30px;width: 100%;'><b style='color: white;margin-left: 5px;margin-top: 5px;'> ".$data['game_title']."</b></div>"; // game title
+            echo "<img style='float: left;' style='width:200px;height:200px;' src='".$data['game_link']."img/main.png'/>"; // main image            
+            echo "<input style='float: right;margin-right: 5px;margin-top: 10px;' onclick='goto_room($data[0])' type='button' value='Play Now'/>"; // Rooms Button            
+            echo "<div style='float: left;margin-left: 5px;margin-top: 10px;'> ".$data['game_desc']." </div>"; // game title            
+            echo "</div>";
+        }
+        $db->close();
+    }
+    
+    // Get Rooms
+    if($req=="getRoomsList")
+    {
+        $game_id = $_POST['game_id'];
+        $db->connect();
+        $result = $db->query("select * from rooms where game_id=".$game_id);
+        while($data=  mysql_fetch_array($result))
+        {
+            
+            $res_room = $db->query("select count(*) from player where room_id=".$data[0]);
+            $data_room = mysql_fetch_array($res_room);
+            
+            $bttn_text = "Start Game";
+            
+            if($data_room[0]>0)
+            {
+                $bttn_text = "Join Game";
+            }
+            
+            if($data_room[0] == $data['max_players'])
+            {
+                $bttn_text = "Room Full";
+            }
+            
+            echo "<div class='off_white' style='width: 200px; height: 300px;float: left;margin-left: 5px; margin-top: 5px;'>";
+            echo "<div class='bg_blue' style='float: left;height: 30px;width: 100%;'><b style='color: white;margin-left: 5px;margin-top: 5px;'> ".$data['room_name']."</b></div>"; // game title        
+            echo "<input style='float: right;margin-right: 5px;margin-top: 10px;' type='button' onclick='goto_game($data[0])' value='$bttn_text'/>"; // Rooms Button            
+            echo "<div style='float: left;margin-left: 5px;margin-top: 10px;'> ".$data_room[0]."/".$data['max_players']." </div>"; // game title            
+            echo "</div>";
         }
         $db->close();
     }
